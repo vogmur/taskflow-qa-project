@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QA TaskFlow</title>
+    <style>
+        body {font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f9;}
+        input {padding: 10px; width: 300px; border: 1px solid #ccc; border-radius: 4px;}
+        button {padding: 10px 15px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;}
+        button:hover {background-color: #45a049;}
+        ul {list-style-type: none; padding: 0; margin-top: 20px;}
+        li {background-color: white; margin-bottom: 10px; padding: 10px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);}
+    </style>
+</head>
+<body>
+   <h1>Мой список задач (QA TaskFlow)</h1> 
+
+   <div>
+    <input type="text" id="taskTitle" placeholder="Введите новую задачу...">
+    <button onclick="addTask()">Добавить</button>
+   </div>
+
+   <ul id="taskList"></ul>
+
+   <script>
+       async function loadTasks() {
+           const response = await fetch('/api/tasks');
+           const tasks = await response.json();
+           const list = document.getElementById('taskList');
+           list.innerHTML = '';
+
+           tasks.forEach(task => {
+               const li = document.createElement('li');
+               li.textContent = `${task.title} (Статус: ${task.status})`;
+               list.appendChild(li);
+           });
+       }
+
+       async function addTask() {
+           const titleInput = document.getElementById('taskTitle');
+           const title = titleInput.value;
+
+           if (!title.trim()) {
+               alert('Введите название задачи!');
+               return;
+           }
+
+           const response = await fetch('/api/tasks', {
+               method: 'POST',
+               headers: {'Content-Type': 'application/json'},
+               body: JSON.stringify({title: title})
+           });
+
+           if (response.ok) {
+               titleInput.value = '';
+               loadTasks();
+           } else {
+               alert('Ошибка при добавлении!');
+           }
+       }
+       loadTasks();
+   </script>
+</body>
+</html>
