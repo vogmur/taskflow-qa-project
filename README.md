@@ -4,7 +4,7 @@
 
 
 ## О проекте
-**TaskFlow** - это простой таск-менеджер (backend: Python/Flask, frontend: HTML/JS, DB: SQLIte), созданный для отработкинавыков тестирования полного цикла (STLC).
+**TaskFlow** - это простой таск-менеджер (backend: Python/Flask, frontend: HTML/JS, DB: SQLIte), созданный для отработки навыков тестирования полного цикла (STLC).
 
 ## Примененные инструменты
 * **Web & UI:** Chrome DevTools, Postman (REST), Charles (Proxy), Mockoon (Mocks).
