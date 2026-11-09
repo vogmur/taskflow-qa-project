@@ -10,7 +10,9 @@
         button {padding: 10px 15px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;}
         button:hover {background-color: #45a049;}
         ul {list-style-type: none; padding: 0; margin-top: 20px;}
-        li {background-color: white; margin-bottom: 10px; padding: 10px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);}
+        li {background-color: white; margin-bottom: 10px; padding: 10px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; word-break: break-all;}
+        .btn-done {background-color: #2196F3;}
+        .btn-delete {background-color: #f44336;}
     </style>
 </head>
 <body>
@@ -32,9 +34,37 @@
 
            tasks.forEach(task => {
                const li = document.createElement('li');
-               li.textContent = `${task.title} (Статус: ${task.status})`;
+
+               // Левая часть: текст задачи
+               const span = document.createElement('span');
+               span.textContent = `${task.title} (Статус: ${task.status})`;
+
+               // Правая часть: контейнер для кнопок
+               const btnContainer = document.createElement('div');
+               btnContainer.style.display = 'flex';
+               btnContainer.style.flexShrink = '0';
+
+               // Кнопка "Выполнить"
+               const btnDone = document.createElement('button');
+               btnDone.textContent = 'Выполнить';
+               btnDone.className = 'btn-done';
+               btnDone.onclick = () =>updateTaskStatus(task.id, 'done');
+
+               // Кнопка "Удалить"
+               const btnDelete = document.createElement('button');
+               btnDelete.textContent = 'Удалить';
+               btnDelete.className = 'btn-delete';
+               btnDelete.onclick = () => deleteTask(task.id);
+
+               // Собираем все вместе
+               btnContainer.appendChild(btnDone);
+               btnContainer.appendChild(btnDelete);
+
+               li.appendChild(span);
+               li.appendChild(btnContainer);
                list.appendChild(li);
            });
+          
        }
 
        async function addTask() {
@@ -57,6 +87,23 @@
                loadTasks();
            } else {
                alert('Ошибка при добавлении!');
+           }
+       }
+       async function updateTaskStatus(id, status) {
+           const response = await fetch(`/api/tasks/${id}`, {
+               method: 'PUT',
+               headers: {'Content-Type': 'application/json'},
+               body: JSON.stringify({status: status})
+           });
+           if (response.ok) loadTasks();
+       }
+
+       async function deleteTask(id) {
+           if (confirm('Вы уверены, что хотите удалить задачу?')) {
+                const response = await fetch (`/api/tasks/${id}`, {
+                    method: 'DELETE'
+                });
+                if (response.ok) loadTasks();
            }
        }
        loadTasks();

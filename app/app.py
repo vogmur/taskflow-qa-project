@@ -41,6 +41,27 @@ def create_task():
     conn.close()
     return jsonify({"message": "Task created"}), 201
 
+#4. API: Обновить статус задачи (PUT)
+@app.route('/api/tasks/<int:task_id>', methods=['PUT'])
+def update_task(task_id):
+    data = request.get_json()
+    if not data or 'status' not in data:
+        return jsonify({"error": "Status is required"}), 400
+
+    conn = get_db_connection()
+    conn.execute('UPDATE tasks SET status = ? WHERE id = ?', (data['status'], task_id))
+    conn.commit()
+    conn.close()
+    return jsonify({"message": "Task update"}), 200
+
+# 5. API: Удалить задачу (DELETE)
+@app.route('/api/tasks/<int:task_id>', methods=['DELETE'])
+def delete_task(task_id):
+    conn = get_db_connection()
+    conn.execute('DELETE FROM tasks WHERE id = ?', (task_id,))
+    conn.commit()
+    conn.close()
+    return jsonify({"message": "Task deleted"}), 200
 if __name__ == '__main__':
     app.run(debug=True)
 
