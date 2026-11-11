@@ -1,0 +1,145 @@
+{
+  "info": {
+    "_postman_id": "2db533f4-ddfb-4c69-a624-fa4d67171176",
+    "name": "TaskFlow API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57964276",
+    "_collection_link": "https://go.postman.co/collection/57964276-2db533f4-ddfb-4c69-a624-fa4d67171176?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Получение списка задач",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r\n    pm.response.to.have.status(200);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/tasks",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "tasks"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Создание задачи",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// 1. Генерируем уникальное название: слово \"ЗАДАЧА_\" + текущее время в миллисекундах\r\nconst uniqueTitle = \"Задача_\" + Date.now();\r\n\r\n// 2. Сохраняем это название в переменную окружения под именем dynamicTitle\r\npm.environment.set(\"dynamicTitle\", uniqueTitle);\r\n\r\n// 3. Выводим результат в консоль, чтобы мы могли увидеть, что получилось\r\nconsole.log(\"Сгенерированно: \" + uniqueTitle);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"title\": \"Задача созданная через Postman\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/tasks",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "tasks"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Обновление задачи",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"status\": \"done\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/tasks/6",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "tasks",
+            "6"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Удаление задачи",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/tasks/6",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "tasks",
+            "6"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
